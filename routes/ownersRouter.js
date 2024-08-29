@@ -26,9 +26,13 @@ router.post("/create", async function(req,res){
     }
 });
 
-router.get("/", function(req,res){
-    res.send("hey it is working");
-});
+ router.get("/admin", function(req,res){
+    res.render("createproduct");
+ });
+
+// router.get("/", function(req,res){
+//     res.send("hey it is working");
+// });
 
 module.exports =  router;
 

@@ -4,11 +4,12 @@ const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-router.get("/", function(req,res){
-    res.send("hey it is working");
-});
+// router.get("/", function(req,res){
+//     res.send("hey it is working");
+// });
 
 router.post("/register",  async function(req,res){
+    // res.send("hello");
     let {fullname, email, password} = req.body;
 
     let user =  await userModel.findOne({email: email});
@@ -37,7 +38,6 @@ router.post("/register",  async function(req,res){
 
 });
 
-
 router.post("/login", async function(req,res){
     let {email, password} = req.body;
 
@@ -55,8 +55,16 @@ router.post("/login", async function(req,res){
         }
     })
     
-
 });
+router.get("/logout", async function(req,res){
+            res.cookie("token", "");
+            res.redirect("/");
+});
+
+
+
+
+
 
 module.exports =  router;
 
