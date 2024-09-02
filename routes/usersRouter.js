@@ -6,35 +6,42 @@ const jwt = require("jsonwebtoken");
 const productModel = require("../models/product-model")
 
 
-// router.get("/", function(req,res){
-//     res.send("hey it is working");
-// });
+
 
 router.post("/register",  async function(req,res){
     // res.send("hello");
     let {fullname, email, password} = req.body;
 
     let user =  await userModel.findOne({email: email});
-    if(user) res.status(401).send("already have account");
+    
+    if(user){
+        let error = "Already have an account please login"
+        res.render("index",{error});
+    } 
+    if(fullname.length < 3 || email==0 || password==0 ){
+        let error = "Please enter valid name, email and password"
+        res.render("index",{error});
+    }
 
+    else{
+        bcrypt.genSalt(10, function(err, salt){
+            bcrypt.hash(password, salt, async function( err, hash){
+                if(err) res.send(err.massage);
+                else{
+                    let user = await userModel.create({
+                        fullname,
+                        email,
+                        password: hash
+                    })
+                    // res.send(user);
+                    // let token = jwt.sign({email, id: user._id}, "secret");
+                    // res.cookie("token", token);
+                    res.render("index",{error:"User Created Succesfully!!!"});
 
-    bcrypt.genSalt(10, function(err, salt){
-        bcrypt.hash(password, salt, async function( err, hash){
-            if(err) res.send(err.massage);
-            else{
-                let user = await userModel.create({
-                    fullname,
-                    email,
-                    password: hash
-                })
-                // res.send(user);
-                let token = jwt.sign({email, id: user._id}, "secret");
-                res.cookie("token", token);
-                res.send("user created");
-
-            }
+                }
+            })
         })
-    })
+    }
 
     
 
@@ -45,19 +52,23 @@ router.post("/login", async function(req,res){
 
     let user = await userModel.findOne({email: email});
     let products = await productModel.find();
-    if(!user) res.send("Email or password incorrect");
+    if(!user) res.render("index",{error:"Email or password incorrect"});
 
-    bcrypt.compare(password, user.password, function(err, result){
-        if(result){
-            let token = jwt.sign({email, id: user._id}, "secret");
-            res.cookie("token", token);
-            res.render("shop",{products});
-        }
-        else{
-            res.send("Email or password incorrect");
-        }
-    })
-    
+    else{
+
+        bcrypt.compare(password, user.password, function(err, result){
+            if(result){
+                let token = jwt.sign({email, id: user._id}, "secret");
+                res.cookie("token", token);
+                res.render("shop",{products});
+            }
+            else{
+                res.render("index",{error:"Email or password incorrect"});
+            }
+        })
+        
+    }
+
 });
 router.get("/logout", async function(req,res){
             res.cookie("token", "");
