@@ -11,7 +11,8 @@ router.get("/", async function(req,res){
 });
 router.get("/shop", isLoggedin, async function(req,res){
     let products = await productModel.find();
-    res.render("shop",{products});
+    
+    res.render("shop",{products: products});
 });
 router.get("/cart", isLoggedin, async function(req,res){
     // let products = await productModel.find();
@@ -21,7 +22,8 @@ router.get("/account", isLoggedin, async function(req,res){
     // let products = await productModel.find();
     res.send("it your account");
 });
-// router.post("/cart", isLoggedin,)
+
+
 
 
 

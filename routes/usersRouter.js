@@ -4,6 +4,7 @@ const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const productModel = require("../models/product-model")
+const ownerModel = require("../models/owner-model")
 
 
 
@@ -51,14 +52,15 @@ router.post("/login", async function(req,res){
     let {email, password} = req.body;
 
     let user = await userModel.findOne({email: email});
+    // let owner = await ownerModel.findOne({email: email});
     let products = await productModel.find();
     if(!user) res.render("index",{error:"Email or password incorrect"});
-
+    
     else{
 
         bcrypt.compare(password, user.password, function(err, result){
             if(result){
-                let token = jwt.sign({email, id: user._id}, "secret");
+                let token = jwt.sign({email, id: user._id}, "secret", { expiresIn: "1h" } );
                 res.cookie("token", token);
                 res.render("shop",{products});
             }
@@ -70,6 +72,7 @@ router.post("/login", async function(req,res){
     }
 
 });
+
 router.get("/logout", async function(req,res){
             res.cookie("token", "");
             res.redirect("/");
