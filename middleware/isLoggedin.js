@@ -21,7 +21,7 @@ module.exports = async function(req,res,next) {
       }
   
       // Token is valid, store user info in req object for future use
-    //   req.user = decoded;
+      req.user = decoded;
   
       // Continue to the next middleware or route
     

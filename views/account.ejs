@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="font-['helvetica_now_display']">
+    <nav class="w-full flex justify-between px-5 py-3 bg-zinc-800 text-white">
+        <h3 class="text-xl">E-commerce</h3>
+        <div class="flex gap-5">
+            <a href="/shop">Shop</a>
+            <a href="/cart">Cart</a>
+            <a href="/my-account" class="font-bold">My Account</a>
+            <a class="text-red-500" href="/logout">Log out</a>
+        </div>
+    </nav>
+
+    <div class="w-full h-screen flex items-start px-20 py-20">
+        <div class="w-full max-w-[600px] mx-auto flex flex-col gap-5">
+            <h1 class="text-2xl font-bold mb-5">My Account</h1>
+
+            <div class="bg-white shadow-lg rounded-lg p-5">
+                <h2 class="text-xl font-semibold mb-4">Account Details</h2>
+                <div class="flex items-center mb-4">
+                    <% if (profilePicture) { %>
+                        <img src="/<%= profilePicture %>" alt="Profile Picture" class="w-24 h-24 rounded-full border border-gray-300 mr-4">
+                    <% } else { %>
+                        <div class="w-24 h-24 rounded-full border border-gray-300 mr-4 bg-gray-200 flex items-center justify-center">
+                            <i class="ri-user-line text-gray-500 text-3xl"></i>
+                        </div>
+                    <% } %>
+                    <form action="/upload-profile-picture" method="post" enctype="multipart/form-data">
+                        <input type="file" name="profilePicture" accept="image/*" class="mb-4">
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Upload Profile Picture</button>
+                    </form>
+                </div>
+                <p><strong>Email:</strong> <%= email %></p>
+                <p><strong>Phone Number:</strong> <%= phone %></p>
+            </div>
+
+            <a href="/update-profile" class="mt-5 inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update Profile</a>
+        </div>
+    </div>
+</body>
+
+</html>
