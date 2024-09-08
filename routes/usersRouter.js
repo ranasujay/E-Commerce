@@ -16,12 +16,12 @@ router.post("/register",  async function(req,res){
     let user =  await userModel.findOne({email: email});
     
     if(user){
-        let error = "Already have an account please login"
-        res.render("index",{error});
+        req.flash("error", "Aleady have an account, Please login")
+        res.redirect("/"); 
     } 
     else if(fullname.length < 3 || email==0 || password==0 ){
-        let error = "Please enter valid name, email and password"
-        res.render("index",{error});
+        req.flash("error", "Please enter valid name, email and password")
+        res.redirect("/"); 
     }
     else{
         bcrypt.genSalt(10, function(err, salt){
@@ -36,7 +36,8 @@ router.post("/register",  async function(req,res){
                     // res.send(user);
                     // let token = jwt.sign({email, id: user._id}, "secret");
                     // res.cookie("token", token);
-                    res.render("index",{error:"User Created Succesfully!!!"});
+                    req.flash("error", "User created successfully")
+                    res.redirect("/"); 
 
                 }
             })
@@ -55,7 +56,10 @@ router.post("/login", async function(req,res){
     let products = await productModel.find();
 
 
-    if(!user) res.render("index",{error:"Email or password incorrect"}); 
+    if(!user){
+        req.flash("error", "Email or password incorrect")
+        res.redirect("/"); 
+    } 
     
     else{
 
@@ -65,14 +69,15 @@ router.post("/login", async function(req,res){
                 res.cookie("token", token);
           
                 if(owner){
-                    res.render("./ownerspages/shop",{products});
+                    res.redirect("/ownershop");
                 }
                 else{
-                    res.render("shop",{products});
+                    res.redirect("/shop");
                 }
             }
             else{
-                res.render("index",{error:"Email or password incorrect"});
+                req.flash("error", "Email or password incorrect")
+                res.redirect("/"); 
             }
         })
         
