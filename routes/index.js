@@ -40,7 +40,7 @@ router.get("/account", isLoggedin, async function(req,res){
     let user_email = user1.email;
     let user = await userModel.findOne({email: user_email});
     
-    res.render("account",{email:user.email, phone:user.contact, profilePicture:user.picture});
+    res.render("account",{fullname: user.fullname, email:user.email, phone:user.contact, profilePicture:user.picture});
 
 });
 router.get("/ownershop", isLoggedin, async function(req,res){
@@ -54,7 +54,6 @@ router.get("/ownershop", isLoggedin, async function(req,res){
 
     res.render("./ownerspages/shop", {products});
 });
-
 router.get("/owneraccount", isLoggedin, async function(req,res){
     // let products = await productModel.find();
     let user = req.user;
