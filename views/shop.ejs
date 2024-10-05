@@ -1,100 +1,117 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>E-commerce</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="font-['helvetica_now_display']">
-    <nav class="w-full flex justify-between px-5 py-3 bg-zinc-800 text-white">
-        <h3 class="text-xl">E-commerce</h3>
-        <div class="flex gap-5">
-            <a href="/shop">Shop</a>
-            <a href="/cart">Cart</a>      
-            <a href="/account">My Account</a>
-            <a class="text-red-500" href="/users/logout">Log out</a>
+<body class="font-['helvetica_now_display'] bg-gray-900 text-gray-100">
+    <!-- Navbar -->
+    <nav class="w-full flex justify-between px-6 py-4 bg-gray-800 text-gray-100 shadow-lg">
+        <h3 class="text-lg sm:text-xl font-semibold">E-commerce</h3>
+        <div class="flex gap-3 sm:gap-5">
+            <a href="/shop" class="font-bold text-blue-400 hover:text-blue-500 transition">Shop</a>
+            <a href="/cart" class="hover:text-blue-400 transition">Cart</a>
+            <a href="/account" class="hover:text-blue-400 transition">My Account</a>
+            <a href="/users/logout" class="text-red-500 hover:text-red-400 transition">Log out</a>
         </div>
-
     </nav>
 
-    <% if(success.length>0){ %>
-        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
-            <span class="inline-block mt-1 mb-1 text-white">
-                <%= success %>
-            </span>
-        </div>
-        <% } %>
+    <!-- Sidebar Toggle Button (Fixed on the left side) -->
+    <button id="sidebarToggle" class="fixed top-1/2 left-0 transform -translate-y-1/2 bg-blue-500 bg-opacity-50 text-white px-3 py-2 rounded-r-md hover:bg-blue-600 z-50">
+        <i class="ri-menu-line text-xl"></i>
+    </button>
 
-    <div class="w-full h-screen flex items-start px-20 py-20">
-        <div class="w-[25%] flex h-screen flex-col items-start">
+    <!-- Sidebar (Initially hidden) -->
+    <div id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-zinc-800 text-white transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <div class="p-5">
+            <div class="flex justify-between items-center">
+                <h4 class="text-xl font-semibold mb-5">Menu</h4>
+
+                <!-- Close Button inside Sidebar -->
+                <button id="closeSidebar" class="text-white hover:text-gray-300 transition">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+
+            <!-- Sort Options -->
             <div class="flex items-center gap-2">
-                <h3>sort by</h3>
+                <h3 class="text-sm sm:text-base">Sort by</h3>
                 <form action="/shop">
-                    <select class="border-[1px] px-2 py-1" name="sortby" id="">
+                    <select class="border border-gray-500 bg-gray-800 text-white px-2 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                        name="sortby">
                         <option value="popular">Popular</option>
                         <option value="newest">Newest</option>
                     </select>
                 </form>
             </div>
-            <div class="flex flex-col mt-20">
-                <a class="block w-fit mb-2" href="">New Collection</a>
-                <a class="block w-fit mb-2" href="">All Products</a>
-                <a class="block w-fit mb-2" href="">Discounted Products</a>
+
+            <!-- Categories -->
+            <div class="mt-5">
+                <h4 class="text-sm sm:text-lg font-semibold mb-3">Categories</h4>
+                <a href="#" class="block hover:text-blue-400 mb-2 transition">New Collection</a>
+                <a href="#" class="block hover:text-blue-400 mb-2 transition">All Products</a>
+                <a href="#" class="block hover:text-blue-400 mb-2 transition">Discounted Products</a>
             </div>
-            <div class="mt-32">
-                <a class="block w-fit mb-2" href="">Filter by :</a>
-                <a class="block w-fit mb-2" href="">Availability</a>
-                <a class="block w-fit mb-2" href="">Discount</a>
-            </div>
-        </div>
-        
-        <div class="w-[75%] flex flex-col gap-5 h-screen">
-            <div class="flex items-start gap-5 ">
 
-                <% products.forEach(function(product){ %>
-
-
-                <div class="w-60 ">
-
-                    <div class="w-full h-52  rounded-md flex items-center justify-center bg-[<%= product.bgcolor %>]">
-                        <img class="h-[12rem]" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
-                            alt="">
-                    </div>
-                    <div
-                        class="mt-1 h-25 flex justify-between rounded-md bg-[<%=product.panelcolor%>] items-center px-4 py-4 text-white ">
-                    <div>
-                            <h3 class="text-xl font-semibold">
-                                <%= product.name%>
-                            </h3>
-                            <h4>
-                                ₹ <%= product.price%>
-                            </h4>
-                            <h3>
-                                Discount - ₹ 
-                                <%= product.discount%>
-                            </h3>
-                            
-                        </div>
-                        <div class="bg-white rounded-md">
-                            <a class="w-7 h-7 flex items-center justify-center rounded-full text-black" href="/addtocart/<%=product._id%>">
-                                <i class="ri-add-line"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-
-                <% }) %>
-                
+            <!-- Filter Options -->
+            <div class="mt-5">
+                <h4 class="text-sm sm:text-lg font-semibold mb-3">Filter by</h4>
+                <a href="#" class="block hover:text-blue-400 mb-2 transition">Availability</a>
+                <a href="#" class="block hover:text-blue-400 mb-2 transition">Discount</a>
             </div>
         </div>
     </div>
-            
-        </body>
 
-        </html>
+    <!-- Main Content -->
+    <div class="w-full flex flex-col sm:flex-row items-start px-5 sm:px-10 py-5 sm:py-10">
+        <div class="w-full sm:w-3/4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+            <% products.forEach(function(product) { %>
+            <div class="bg-gray-800 rounded-md shadow-lg hover:shadow-xl transition overflow-hidden">
+                <!-- Product Image -->
+                <div class="w-full h-40 sm:h-56 flex items-center justify-center bg-[<%= product.bgcolor %>]">
+                    <img class="h-32 sm:h-40" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="<%= product.name %>">
+                </div>
+
+                <!-- Product Info -->
+                <div class="p-3 sm:p-4 bg-[<%= product.panelcolor %>]">
+                    <h3 class="text-base sm:text-lg font-semibold mb-1"><%= product.name %></h3>
+                    <h4 class="text-sm sm:text-base mb-1">₹ <%= product.price %></h4>
+                    <h4 class="text-xs sm:text-sm text-gray-400">Discount - ₹ <%= product.discount %></h4>
+
+                    <!-- Add to Cart Button -->
+                    <div class="flex justify-end mt-3">
+                        <a class="w-8 h-8 flex items-center justify-center rounded-full bg-white text-black hover:bg-gray-300 transition"
+                            href="/addtocart/<%= product._id %>">
+                            <i class="ri-add-line"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <!-- JavaScript for Sidebar Toggle -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const closeSidebar = document.getElementById('closeSidebar');
+
+        // Toggle sidebar visibility
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Close sidebar from inside the sidebar
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+        });
+    </script>
+</body>
+
+</html>

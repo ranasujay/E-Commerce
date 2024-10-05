@@ -1,86 +1,107 @@
-<%- include('./partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
 
-    <% var totalamount = 0, totaldiscount = 0, platformFee = 0 %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 px-10 py-10"> <!-- Reduced gap and padding -->
-        <% user.cart.forEach(function(item){ %>
-            <div class="px-1 py-1">
-                <div class="rounded-md overflow-hidden">
-                    <div class="w-full h-48 bg-[<%=item.bgcolor%>] flex items-center justify-center"> <!-- Reduced height -->
-                        <img class="h-[10rem]" src="data:image/jpeg;base64,<%= item.image.toString('base64') %>" alt=""> <!-- Smaller image -->
+<body class="font-['helvetica_now_display'] bg-gray-900 text-gray-300 min-h-screen">
+    <!-- Navbar -->
+    <nav class="w-full flex justify-between px-6 py-4 bg-gray-800 text-gray-100 shadow-lg">
+        <h3 class="text-xl font-bold text-white">E-commerce</h3>
+        <div class="flex gap-6 items-center">
+            <a href="/shop" class="hover:text-blue-400">Shop</a>
+            <a href="/cart" class="font-bold text-blue-400">Cart</a>
+            <a href="/account" class="hover:text-blue-400">My Account</a>
+            <a class="text-red-500 hover:text-red-700" href="/logout">Log out</a>
+        </div>
+    </nav>
+
+<% var totalamount = 0, totaldiscount = 0, platformFee = 0 %>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-8 py-12 bg-gray-900 text-gray-100"> 
+    <% user.cart.forEach(function(item){ %>
+        <div class="px-2 py-2">
+            <div class="rounded-lg overflow-hidden shadow-lg">
+                <!-- Product Image -->
+                <div class="w-full h-44 bg-[<%=item.bgcolor%>] flex items-center justify-center">
+                    <img class="h-[8rem]" src="data:image/jpeg;base64,<%= item.image.toString('base64') %>" alt="">
+                </div>
+                <!-- Product Name and Quantity -->
+                <div class="w-full flex justify-between px-4 py-3 bg-[<%=item.bgcolor%>]">
+                    <h3 class="text-lg font-medium"><%=item.name%></h3>
+                    <div class="flex items-center gap-2 bg-[<%=item.panelcolor%>] rounded-md">
+                        <i class="w-6 h-6 bg-white flex rounded-full items-center justify-center ri-add-line"></i>
+                        <div class="px-2 py-1 rounded bg-white text-black text-sm">01</div>
+                        <i class="w-6 h-6 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
                     </div>
-                    <div class="w-full flex justify-between px-3 py-2 bg-[<%=item.bgcolor%>]"> <!-- Reduced padding -->
-                        <h3 class="text-lg"><%=item.name%></h3> <!-- Smaller text -->
-                        <div class="flex items-center gap-1 bg-[<%item.panelcolor%>]"> <!-- Reduced gap -->
-                            <i class="w-5 h-5 bg-white flex rounded-full items-center justify-center ri-add-line"></i> <!-- Smaller icon -->
-                            <div class="px-1 py-1 rounded-md bg-white text-black text-xs">01</div> <!-- Smaller text and padding -->
-                            <i class="w-5 h-5 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i> <!-- Smaller icon -->
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between px-3 py-2 bg-[<%=item.panelcolor%>] text-[<%=item.textcolor%>]">
-                        <h4 class="text-xs">Amount</h4> <!-- Smaller text -->
-                        <h2 class="text-xs">₹ <%=item.price%></h2> <!-- Smaller text -->
-                        
-                        <h4 class="text-xs">Discount</h4> <!-- Smaller text -->
-                        <h4 class="text-xs">₹ <%= item.discount%></h4> <!-- Smaller text -->
-                    </div>
+                </div>
+                <!-- Amount and Discount -->
+                <div class="flex items-center justify-between px-4 py-3 bg-[<%=item.panelcolor%>] text-[<%=item.textcolor%>]">
+                    <h4 class="text-sm">Amount</h4>
+                    <h2 class="text-sm">₹ <%=item.price%></h2>
+
+                    <h4 class="text-sm">Discount</h4>
+                    <h4 class="text-sm">₹ <%= item.discount%></h4>
                 </div>
             </div>
-            <% platformFee = 20%>
-            <% totalamount += item.price%>
-            <% totaldiscount += item.discount%>
-        <% }) %>
-    </div>
-    
+        </div>
+        <% platformFee = 20 %>
+        <% totalamount += item.price %>
+        <% totaldiscount += item.discount %>
+    <% }) %>
+</div>
 
-    <div class="flex justify-center mt-10">  
-        <div class="w-[50%]">
-            <h3 class="text-2xl font-semibold mb-4">Price Breakdown</h3>
-            <div class="px-10 mt-5 space-y-4">
-                <div class="flex justify-between">
-                    <h4 class="w-1/2 text-gray-600">Total MRP</h4>
-                    <h4>₹ <%= totalamount %></h4>
-                </div>
-                <div class="flex justify-between">
-                    <h4 class="w-1/2 text-gray-600">Discount on MRP</h4>
-                    <h4>₹ (-)<%= totaldiscount %></h4>
-                </div>
-                <div class="flex justify-between">
-                    <h4 class="w-1/2 text-gray-600">Platform Fee</h4>
-                    <h4>₹ <%= platformFee %></h4>
-                </div>
-                <div class="flex justify-between">
-                    <h4 class="w-1/2 text-gray-600">Shipping Fee</h4>
-                    <h4 class="text-green-600">FREE</h4>
-                </div>
+<!-- Price Breakdown -->
+<div class="flex justify-center mt-12 bg-gray-900 text-gray-100">  
+    <div class="w-[50%] bg-gray-800 rounded-lg shadow-md p-6">
+        <h3 class="text-3xl font-semibold text-white mb-6">Price Breakdown</h3>
+        <div class="px-6 mt-4 space-y-6">
+            <div class="flex justify-between">
+                <h4 class="w-1/2 text-gray-400">Total MRP</h4>
+                <h4 class="font-medium">₹ <%= totalamount %></h4>
             </div>
-    
-            <div class="w-full h-[1px] bg-gray-300 mt-8"></div>
-    
-            <!-- Total Amount and Order Now -->
-            <div class="flex justify-between items-center mt-4">
-                <!-- Total Amount -->
-                <div class="flex w-1/2">
-                    <h3 class="text-2xl font-semibold">Total Amount</h3>
-                </div>
-                <!-- Total Amount Value -->
-                <h3 class="mr-5 text-2xl font-bold text-green-600 w-1/2 text-right">₹ <%= totalamount - totaldiscount + platformFee %></h3>
+            <div class="flex justify-between">
+                <h4 class="w-1/2 text-gray-400">Discount on MRP</h4>
+                <h4>₹ (-)<%= totaldiscount %></h4>
             </div>
-    
-            <div class="flex justify-end mt-4">
-                <!-- Order Now Button -->
-                <%if(platformFee!=0){%>
-                <a href="" class="px-6 py-3 bg-green-500 text-white font-bold rounded-md hover:bg-green-600 transition duration-300">
+            <div class="flex justify-between">
+                <h4 class="w-1/2 text-gray-400">Platform Fee</h4>
+                <h4>₹ <%= platformFee %></h4>
+            </div>
+            <div class="flex justify-between">
+                <h4 class="w-1/2 text-gray-400">Shipping Fee</h4>
+                <h4 class="text-green-400">FREE</h4>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="w-full h-[1px] bg-gray-600 mt-8"></div>
+
+        <!-- Total Amount and Order Now -->
+        <div class="flex justify-between items-center mt-6">
+            <div class="flex w-1/2">
+                <h3 class="text-2xl font-semibold">Total Amount</h3>
+            </div>
+            <h3 class="text-2xl font-bold text-green-500 w-1/2 text-right">₹ <%= totalamount - totaldiscount + platformFee %></h3>
+        </div>
+
+        <!-- Order Now Button -->
+        <div class="flex justify-end mt-6">
+            <% if (platformFee != 0) { %>
+                <a href="" class="px-6 py-3 bg-green-600 text-white font-bold rounded-md hover:bg-green-700 transition duration-300">
                     Order Now
                 </a>
-                <% } %>
-            </div>
-    
-            <div class="w-full h-[1px] bg-gray-300 mt-6 mb-5"></div>
+            <% } %>
         </div>
+
+        <!-- Footer Divider -->
+        <div class="w-full h-[1px] bg-gray-600 mt-6 mb-4"></div>
     </div>
-    
-    
-    
-    
-    <%- include('./partials/footer') %>
+</div>
+
+<%- include('./partials/footer') %>
