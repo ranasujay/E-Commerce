@@ -4,18 +4,22 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
-const db = require("./config/mongoose-connection");
+const connectDB = require("./config/mongoose-connection");
 const ownersRouter = require("./routes/ownersRouter");
 const productsRouter = require("./routes/productsRouter");
 const usersRouter = require("./routes/usersRouter");
 const index = require("./routes/index");
 const session = require('express-session');
 const flash = require('connect-flash');
+const dotenv = require("dotenv");
 
 
 
 // const userModel = require("./models/user");
 // const postModel = require("./models/post");
+
+dotenv.config();
+connectDB();
 
 app.use(session({
     secret: 'secret',
