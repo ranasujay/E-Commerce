@@ -65,28 +65,30 @@ router.get("/account", isLoggedin, async function(req, res) {
 });
 
 // Owner's Shop route (restricted)
-router.get("/ownershop", isLoggedin, async function(req, res) {
-    let owner = await ownerModel.findOne({ email: req.user.email });
-    if (!owner) {
-        req.flash("error", "Access Denied. Owner not found.");
-        return res.redirect("/account");
-    }
+router.get("/ownershop", async function(req, res) {
+    // console.log("owner2");
+    // let owner = await ownerModel.findOne({ email: req.user.email });
+    // if (!owner) {
+    //     req.flash("error", "Access Denied. Owner not found.");
+    //     return res.redirect("/");
+    // }
     let products = await productModel.find();
     res.render("./ownerspages/shop", { products, success: req.flash("success"), error: req.flash("error") });
 });
 
 // Owner's Account route (restricted)
-router.get("/owneraccount", isLoggedin, async function(req, res) {
-    let owner = await ownerModel.findOne({ email: req.user.email });
-    if (!owner) {
-        req.flash("error", "Access Denied. Owner not found.");
-        return res.redirect("/account");
-    }
-    res.render("ownerspages/account", {
-        owner: owner,
-        success: req.flash("success"),
-        error: req.flash("error")
-    });
+router.get("/owneraccount", async function(req, res) {
+    // let owner = await ownerModel.findOne({ email: req.user.email });
+    // if (!owner) {
+    //     req.flash("error", "Access Denied. Owner not found.");
+    //     return res.redirect("/");
+    // }
+    // res.render("ownerspages/account", {
+    //     owner: owner,
+    //     success: req.flash("success"),
+    //     error: req.flash("error")
+    // });
+    res.redirect("/ownershop");
 });
 
 module.exports = router;

@@ -58,17 +58,30 @@ router.post("/login", async function (req, res) {
     let user = await userModel.findOne({ email: email });
     let owner = await ownerModel.findOne({ email: email });
 
-    if (!user) {
+    if (!user && !owner) {
         req.flash("error", "Email or password incorrect.");
         return res.redirect("/");
     }
-
+    
+    // console.log("owner1");
     try {
-        const match = await bcrypt.compare(password, user.password);
-        if (match) {
-            const token = jwt.sign({ email, id: user._id }, "secret", { expiresIn: "1h" });
-            res.cookie("token", token);
-
+        // const match1 = await bcrypt.compare(password, user.password);
+        let match2;
+        if(owner){
+            match2 = await bcrypt.compare(password, owner.password);
+        }
+        if(user){
+            match2 = await bcrypt.compare(password, user.password);
+        }
+        if (match2) {
+            if(owner){
+                const token = jwt.sign({ email, id: owner._id }, "secret", { expiresIn: "1h" });
+                res.cookie("token", token);
+            }
+            if(user){
+                const token = jwt.sign({ email, id: user._id }, "secret", { expiresIn: "1h" });
+                res.cookie("token", token);
+            }
             if (owner) {
                 return res.redirect("/ownershop");
             } else {

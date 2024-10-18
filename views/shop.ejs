@@ -21,6 +21,23 @@
         </div>
     </nav>
 
+    <% if(error.length > 0){ %>
+        <div class="fixed top-16 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-red-500 shadow-lg">
+            <span class="inline-block text-white">
+                <%= error %>
+            </span>
+        </div>
+        <% } %>
+        
+        <% if(success.length > 0){ %>
+        <div class="fixed top-16 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-green-500 shadow-lg">
+            <span class="inline-block text-white">
+                <%= success %>
+            </span>
+        </div>
+        <% } %>
+    
+
     <!-- Sidebar Toggle Button (Fixed on the left side) -->
     <button id="sidebarToggle" class="fixed top-1/2 left-0 transform -translate-y-1/2 bg-blue-500 bg-opacity-50 text-white px-3 py-2 rounded-r-md hover:bg-blue-600 z-50">
         <i class="ri-menu-line text-xl"></i>
